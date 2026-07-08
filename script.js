@@ -169,12 +169,65 @@ fetch("https://script.google.com/macros/s/AKfycbxMI0L_Q74p57kITVAtmQm3SSGxcsyjAI
     body: formData
 })
 .then(response => response.json())
-.then(result => {
+.then(result => {const whatsappMessage =
+`Hi Horizon Edge SL 👋
+
+My registration has been completed successfully.
+
+Registration ID: ${result.registrationID}
+
+Name: ${data.name}
+
+Email: ${data.email}
+
+Phone: ${data.phone}
+
+Selected Path: ${data.path}
+
+District: ${data.district}
+
+Thank you.`;
+
+const whatsappURL =
+`https://wa.me/94701121744?text=${encodeURIComponent(whatsappMessage)}`;
+
+document.getElementById("whatsappBtn").href = whatsappURL;
 
     document.getElementById("registrationID").innerHTML =
         result.registrationID;
 
     document.getElementById("successPopup").style.display = "block";
+
+   const whatsappBtn = document.getElementById("whatsappBtn");
+
+whatsappBtn.href =
+    "https://wa.me/94701121744?text=Hi Horizon Edge SL! I have completed my registration. My Registration ID is " +
+    result.registrationID;
+
+let seconds = 5;
+
+const countdown = document.getElementById("countdown");
+const countdownText = document.getElementById("countdownText");
+
+countdown.innerHTML = seconds;
+
+const timer = setInterval(() => {
+
+    seconds--;
+
+    countdown.innerHTML = seconds;
+
+    if (seconds <= 0) {
+
+        clearInterval(timer);
+
+        countdownText.innerHTML = "👇 Click below to continue on WhatsApp";
+
+        whatsappBtn.style.animation = "pulse 1s infinite";
+
+    }
+
+}, 1000);
 
     form.reset();
     updateProgress();
