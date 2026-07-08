@@ -155,54 +155,51 @@ form.addEventListener("submit", function (e) {
 
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbxMI0L_Q74p57kITVAtmQm3SSGxcsyjAIybbx3s3CNcii3lrAUyjHUdFzrl2rgjgS8qIw/exec", {
+    const formData = new FormData();
 
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
+formData.append("name", data.name);
+formData.append("email", data.email);
+formData.append("phone", data.phone);
+formData.append("path", data.path);
+formData.append("district", data.district);
+formData.append("promo", data.promo);
 
-    })
+fetch("https://script.google.com/macros/s/AKfycbxMI0L_Q74p57kITVAtmQm3SSGxcsyjAIybbx3s3CNcii3lrAUyjHUdFzrl2rgjgS8qIw/exec", {
+    method: "POST",
+    body: formData
+})
+.then(response => response.json())
+.then(result => {
 
-    .then(response => response.json())
+    document.getElementById("registrationID").innerHTML =
+        result.registrationID;
 
-    .then(result => {
+    document.getElementById("successPopup").style.display = "block";
 
-        document.getElementById("registrationID").innerHTML =
-            result.registrationID || "HESL/000";
+    form.reset();
+    updateProgress();
 
-        document.getElementById("successPopup").style.display = "block";
+    promo.classList.remove("valid","invalid");
+    message.innerHTML="";
+    message.className="";
 
-        form.reset();
-        updateProgress();
+    pathLabels.forEach(item=>item.classList.remove("active"));
 
-        promo.classList.remove("valid", "invalid");
-        message.innerHTML = "";
-        message.className = "";
+})
+.catch(error=>{
+    console.error(error);
+    alert("Registration Failed");
+})
+.finally(()=>{
 
-        pathLabels.forEach(item => item.classList.remove("active"));
+    isSubmitting=false;
 
-    })
+    submitBtn.disabled=false;
 
-    .catch(error => {
+    btnSpinner.style.display="none";
 
-        console.error(error);
+    btnText.innerHTML="Submit";
 
-        alert("Registration Failed. Please try again.");
-
-    })
-
-    .finally(() => {
-
-        isSubmitting = false;
-
-        submitBtn.disabled = false;
-
-        btnSpinner.style.display = "none";
-
-        btnText.innerHTML = "Submit";
-
-    });
+});
 
 });
