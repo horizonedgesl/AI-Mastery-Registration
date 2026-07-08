@@ -169,74 +169,78 @@ fetch("https://script.google.com/macros/s/AKfycbxMI0L_Q74p57kITVAtmQm3SSGxcsyjAI
     body: formData
 })
 .then(response => response.json())
-.then(result => {const whatsappMessage =
-`Hi Horizon Edge SL 👋
+.then(result => {
 
-My registration has been completed successfully.
-
-Registration ID: ${result.registrationID}
-
-Name: ${data.name}
-
-Email: ${data.email}
-
-Phone: ${data.phone}
-
-Selected Path: ${data.path}
-
-District: ${data.district}
-
-Thank you.`;
-
-const whatsappURL =
-`https://wa.me/94701121744?text=${encodeURIComponent(whatsappMessage)}`;
-
-document.getElementById("whatsappBtn").href = whatsappURL;
-
+    // Registration ID
     document.getElementById("registrationID").innerHTML =
         result.registrationID;
 
+    // WhatsApp Message
+    const whatsappMessage = `🚀 Horizon Edge SL
+
+Hello, I have successfully completed my registration for the AI Mastery Program.
+
+━━━━━━━━━━━━━━━━━━━━━━
+👤 Name : ${data.name}
+
+🆔 Registration ID : ${result.registrationID}
+
+🎯 Selected Path : ${data.path}
+
+📍 District : ${data.district}
+
+🎁 Promo Code : ${data.promo || "N/A"}
+━━━━━━━━━━━━━━━━━━━━━━
+
+Kindly guide me through the next steps to complete my enrollment.
+
+Thank you! 🙏`;
+
+    const whatsappURL =
+        `https://wa.me/94701121744?text=${encodeURIComponent(whatsappMessage)}`;
+
+    const whatsappBtn = document.getElementById("whatsappBtn");
+    whatsappBtn.href = whatsappURL;
+
+    // Show Success Popup
     document.getElementById("successPopup").style.display = "block";
 
-   const whatsappBtn = document.getElementById("whatsappBtn");
+    // Countdown
+    let seconds = 5;
 
-whatsappBtn.href =
-    "https://wa.me/94701121744?text=Hi Horizon Edge SL! I have completed my registration. My Registration ID is " +
-    result.registrationID;
-
-let seconds = 5;
-
-const countdown = document.getElementById("countdown");
-const countdownText = document.getElementById("countdownText");
-
-countdown.innerHTML = seconds;
-
-const timer = setInterval(() => {
-
-    seconds--;
+    const countdown = document.getElementById("countdown");
+    const countdownText = document.getElementById("countdownText");
 
     countdown.innerHTML = seconds;
 
-    if (seconds <= 0) {
+    const timer = setInterval(() => {
 
-        clearInterval(timer);
+        seconds--;
 
-        countdownText.innerHTML = "👇 Click below to continue on WhatsApp";
+        countdown.innerHTML = seconds;
 
-        whatsappBtn.style.animation = "pulse 1s infinite";
+        if (seconds <= 0) {
 
-    }
+            clearInterval(timer);
 
-}, 1000);
+            countdownText.innerHTML =
+                "👇 Click below to continue on WhatsApp";
 
+            whatsappBtn.style.animation = "pulse 1s infinite";
+
+        }
+
+    }, 1000);
+
+    // Reset Form
     form.reset();
     updateProgress();
 
-    promo.classList.remove("valid","invalid");
-    message.innerHTML="";
-    message.className="";
+    promo.classList.remove("valid", "invalid");
+    message.innerHTML = "";
+    message.className = "";
 
-    pathLabels.forEach(item=>item.classList.remove("active"));
+    pathLabels.forEach(item => item.classList.remove("active"));
 
 })
 .catch(error=>{
